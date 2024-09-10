@@ -1,2 +1,0 @@
-# Searchspring
-Created with CodeSandbox
