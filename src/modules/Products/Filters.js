@@ -9,11 +9,10 @@ const StyledSelect = styled.select`
   border: 1px solid #b9b9b9;
   border-radius: 100px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
 `;
 
 export const StyledFilterHeader = styled.div`
-  font-family: Proxima Nova;
   font-size: 14px;
   font-weight: 700;
   margin-bottom: 5px;

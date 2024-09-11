@@ -15,6 +15,8 @@ import { Filters } from "./Filters";
 import { formatterText } from "../../commons/utils/currenyFormatter";
 import { FaSpinner } from "react-icons/fa";
 import { Sort } from "./Sort";
+import { Search } from "./Search";
+import { useDebounce } from "../../commons/utils/useDebounce";
 
 /** STYLED COMPONENTS - START **/
 const FixedHeader = styled.header`
@@ -25,6 +27,13 @@ const FixedHeader = styled.header`
   z-index: 99;
   // height: 70px;
   background-color: #f8f7fc;
+`;
+
+const FilterWrapper = styled.header`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 50px;
 `;
 
 const ProductsWrapper = styled.div`
@@ -65,6 +74,8 @@ const Products = () => {
 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSort, setSelectedSort] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedValue = useDebounce(searchValue, 500);
 
   useEffect(() => {
     dispatch(getProductCategoriesAction());
@@ -78,10 +89,11 @@ const Products = () => {
         },
         queryParams: {
           sort: selectedSort,
+          search: debouncedValue,
         },
       })
     );
-  }, [selectedCategory, selectedSort]);
+  }, [selectedCategory, selectedSort, debouncedValue]);
 
   const handleFilter = (e) => {
     const value = e.target.value;
@@ -96,10 +108,15 @@ const Products = () => {
     setSelectedSort(value);
   };
 
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+  };
+
   return (
     <React.Fragment>
       <FixedHeader>
-        <div>
+        <FilterWrapper>
           <Filters
             productCategories={productCategories}
             handleSelect={handleFilter}
@@ -109,7 +126,8 @@ const Products = () => {
             sortOptions={sortOptions}
             handleSelect={handleSort}
           />
-        </div>
+          <Search searchValue={searchValue} handleSearch={handleSearch} />
+        </FilterWrapper>
         <div>
           <HeaderText>Products</HeaderText>
           <SubHeaderText>

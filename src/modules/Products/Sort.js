@@ -29,7 +29,7 @@ const RadioButton = styled.div`
 
 const Sort = ({ sortOptions = [], handleSelect, selectedSort = "" }) => {
   return (
-    <React.Fragment>
+    <div>
       <StyledFilterHeader>Sort</StyledFilterHeader>
       <RadioGroup>
         {sortOptions.map((option) => (
@@ -46,7 +46,7 @@ const Sort = ({ sortOptions = [], handleSelect, selectedSort = "" }) => {
           </RadioButton>
         ))}
       </RadioGroup>
-    </React.Fragment>
+    </div>
   );
 };
 
