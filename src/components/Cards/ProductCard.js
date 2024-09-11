@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
-import { formatterText } from "../commons/utils/currenyFormatter";
+import { formatterText } from "../../commons/utils/currenyFormatter";
 
 const StyledCard = styled.div`
   font-family: Avenir Next;
@@ -53,7 +53,7 @@ const StyledPriceWrapper = styled.div`
   gap: 8px;
 `;
 
-const RenderRating = ({ rate = 0, review_count = 0 }) => {
+const RenderRating = ({ rate = 0, count = 0 }) => {
   const stars = Math.trunc(rate);
   const halfStar = rate - stars;
 
@@ -65,7 +65,7 @@ const RenderRating = ({ rate = 0, review_count = 0 }) => {
         <FaStar key={index} size={16} />
       ))}
       {halfStar > 0 && <FaStarHalfAlt size={16} />}
-      <span>{`(${review_count})`}</span>
+      <span>{`(${count})`}</span>
     </StyledText>
   );
 };
@@ -81,7 +81,7 @@ const RenderPrice = ({ price = 0, discounted_price = 0, currency = "USD" }) => {
       >
         {formatterText({ type: "currency", text: price, currency: currency })}
       </StyledText>
-      {discounted_price && (
+      {discounted_price > 0 && (
         <StyledText>
           {formatterText({
             type: "currency",
@@ -101,20 +101,14 @@ const RenderPrice = ({ price = 0, discounted_price = 0, currency = "USD" }) => {
 };
 
 const ProductCard = ({ details }) => {
-  const {
-    product_name,
-    imageUrl,
-    rating,
-    price,
-    review_count,
-    discounted_price,
-  } = details;
+  const { title, image, rating, price, discounted_price } = details;
+  const { rate, count } = rating;
 
   return (
     <StyledCard>
-      <StyledImage src={imageUrl} alt={product_name} />
-      <StyledText>{product_name}</StyledText>
-      {rating > 0 && <RenderRating rate={rating} review_count={review_count} />}
+      <StyledImage src={image} alt={title} />
+      <StyledText>{title}</StyledText>
+      {rate > 0 && <RenderRating rate={rate} count={count} />}
       <RenderPrice price={price} discounted_price={discounted_price} />
       <StyledButton>ADD TO BAG</StyledButton>
     </StyledCard>

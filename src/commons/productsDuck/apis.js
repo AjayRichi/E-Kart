@@ -1,7 +1,16 @@
 import axios from "axios";
 
-export function fetchProductsApi() {
-  return axios.get(
-    "https://www.increasingly.co/Clients/Interview/products.json"
-  );
+const BASE_URL = "https://fakestoreapi.com";
+
+export function fetchProductsApi({ pathParams = {} }) {
+  const { category } = pathParams;
+  if (category) {
+    return axios.get(`${BASE_URL}/products/category/${category}`);
+  } else {
+    return axios.get(`${BASE_URL}/products`);
+  }
+}
+
+export function fetchProductCategoriesApi() {
+  return axios.get(`${BASE_URL}/products/categories`);
 }

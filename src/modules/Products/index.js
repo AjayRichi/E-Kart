@@ -1,16 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { productsListSelector } from "../../commons/productsDuck/selectors";
-import { getProductsAction } from "../../commons/productsDuck/actions";
+import {
+  productCategoriesSelector,
+  productsListSelector,
+} from "../../commons/productsDuck/selectors";
+import {
+  getProductCategoriesAction,
+  getProductsAction,
+} from "../../commons/productsDuck/actions";
 import { ProductCard } from "../../components";
 import styled from "styled-components";
+import { Filters } from "./Filters";
+import { formatterText } from "../../commons/utils/currenyFormatter";
+import { FaSpinner } from "react-icons/fa";
 
 const FixedHeader = styled.header`
   position: fixed;
   width: 100%;
-  top: 0;
+  top: 82px;
+  left: 115px;
   z-index: 99;
-  height: 70px;
+  // height: 70px;
   background-color: #f8f7fc;
 `;
 
@@ -20,16 +30,14 @@ const ProductsWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 20px;
-  margin-top: 70px;
   padding: 0px;
+  margin-top: 100px;
 `;
 
 const HeaderText = styled.div`
   font-family: Proxima Nova;
   font-size: 24px;
   font-weight: 700;
-  line-height: 29.23px;
-  text-align: left;
   margin-bottom: 8px;
 `;
 
@@ -37,32 +45,76 @@ const SubHeaderText = styled.div`
   font-family: Proxima Nova;
   font-size: 14px;
   font-weight: 400;
-  line-height: 16.78px;
-  text-align: left;
-  margin-bottom: 24px;
 `;
 
 const Products = () => {
   const dispatch = useDispatch();
   const products = useSelector(productsListSelector);
+  const productCategories = useSelector(productCategoriesSelector);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
-    dispatch(getProductsAction());
-  }, [dispatch]);
+    dispatch(getProductCategoriesAction());
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(
+      getProductsAction({
+        pathParams: {
+          category: selectedCategory,
+        },
+        resolve: () => {
+          setIsLoading(false);
+        },
+        reject: () => {
+          setIsLoading(false);
+        },
+      })
+    );
+  }, [selectedCategory]);
+
+  const handleSelect = (e) => {
+    const value = e.target.value;
+    if (value === "all") {
+      setSelectedCategory("");
+    } else {
+      setSelectedCategory(value);
+    }
+  };
 
   return (
-    <div>
+    <React.Fragment>
       <FixedHeader>
-        <HeaderText>Products</HeaderText>
-        <SubHeaderText>Men's clothing</SubHeaderText>
+        <div>
+          <Filters
+            productCategories={productCategories}
+            handleSelect={handleSelect}
+          />
+        </div>
+        <div>
+          <HeaderText>Products</HeaderText>
+          <SubHeaderText>
+            {formatterText({
+              type: "capitalizeFirstLetter",
+              text: selectedCategory,
+            })}
+          </SubHeaderText>
+        </div>
       </FixedHeader>
       <ProductsWrapper>
-        {products &&
+        {isLoading ? (
+          <FaSpinner size={100} />
+        ) : (
+          products &&
           products.map((product) => (
             <ProductCard key={product.id} details={product} />
-          ))}
+          ))
+        )}
       </ProductsWrapper>
-    </div>
+    </React.Fragment>
   );
 };
 
