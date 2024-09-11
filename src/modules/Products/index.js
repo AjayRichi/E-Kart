@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  isLoadingSelector,
   productCategoriesSelector,
   productsListSelector,
 } from "../../commons/productsDuck/selectors";
@@ -13,7 +14,9 @@ import styled from "styled-components";
 import { Filters } from "./Filters";
 import { formatterText } from "../../commons/utils/currenyFormatter";
 import { FaSpinner } from "react-icons/fa";
+import { Sort } from "./Sort";
 
+/** STYLED COMPONENTS - START **/
 const FixedHeader = styled.header`
   position: fixed;
   width: 100%;
@@ -46,37 +49,41 @@ const SubHeaderText = styled.div`
   font-size: 14px;
   font-weight: 400;
 `;
+/** STYLED COMPONENTS - END **/
+
+const sortOptions = [
+  { label: "Normal", value: "" },
+  { label: "High to low", value: "desc" },
+  { label: "Low to High", value: "asc" },
+];
 
 const Products = () => {
   const dispatch = useDispatch();
   const products = useSelector(productsListSelector);
   const productCategories = useSelector(productCategoriesSelector);
+  const isLoading = useSelector(isLoadingSelector);
 
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSort, setSelectedSort] = useState("");
 
   useEffect(() => {
     dispatch(getProductCategoriesAction());
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
     dispatch(
       getProductsAction({
         pathParams: {
           category: selectedCategory,
         },
-        resolve: () => {
-          setIsLoading(false);
-        },
-        reject: () => {
-          setIsLoading(false);
+        queryParams: {
+          sort: selectedSort,
         },
       })
     );
-  }, [selectedCategory]);
+  }, [selectedCategory, selectedSort]);
 
-  const handleSelect = (e) => {
+  const handleFilter = (e) => {
     const value = e.target.value;
     if (value === "all") {
       setSelectedCategory("");
@@ -85,13 +92,22 @@ const Products = () => {
     }
   };
 
+  const handleSort = (value) => {
+    setSelectedSort(value);
+  };
+
   return (
     <React.Fragment>
       <FixedHeader>
         <div>
           <Filters
             productCategories={productCategories}
-            handleSelect={handleSelect}
+            handleSelect={handleFilter}
+          />
+          <Sort
+            selectedSort={selectedSort}
+            sortOptions={sortOptions}
+            handleSelect={handleSort}
           />
         </div>
         <div>
@@ -108,7 +124,7 @@ const Products = () => {
         {isLoading ? (
           <FaSpinner size={100} />
         ) : (
-          products &&
+          products.length > 0 &&
           products.map((product) => (
             <ProductCard key={product.id} details={product} />
           ))

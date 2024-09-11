@@ -3,6 +3,7 @@ export const ACTIONS = {
   SET_PRODUCTS: "SET_PRODUCTS",
   GET_PRODUCT_CATEGORIES: "GET_PRODUCT_CATEGORIES",
   SET_PRODUCT_CATEGORIES: "SET_PRODUCT_CATEGORIES",
+  SET_LOADING: "SET_LOADING",
 };
 
 export const actionCreator = (type) => {
@@ -20,3 +21,4 @@ export const setProductsAction = actionCreator(ACTIONS.SET_PRODUCTS);
 export const setProductCategoriesAction = actionCreator(
   ACTIONS.SET_PRODUCT_CATEGORIES
 );
+export const setIsLoadingAction = actionCreator(ACTIONS.SET_LOADING);

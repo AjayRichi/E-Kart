@@ -1,6 +1,7 @@
 import { all, call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import {
   ACTIONS,
+  setIsLoadingAction,
   setProductCategoriesAction,
   setProductsAction,
 } from "./actions";
@@ -11,16 +12,18 @@ function* fetchProductsSagaWatcher() {
 }
 
 function* fetchProductsSaga({ payload = {} }) {
-  const { resolve = Function.prototype, reject = Function.prototype } = payload;
-
-  const { status, statusText, data } = yield call(fetchProductsApi, payload);
-
-  if (statusText === "OK" || status === 200) {
-    yield resolve(data);
-    yield put(setProductsAction(data));
-  } else {
+  try {
+    yield put(setIsLoadingAction(true));
+    const { status, statusText, data } = yield call(fetchProductsApi, payload);
+    if (statusText === "OK" || status === 200) {
+      yield put(setProductsAction(data));
+    } else {
+      yield put(setProductsAction([]));
+    }
+  } catch (error) {
     yield put(setProductsAction([]));
-    yield reject(data);
+  } finally {
+    yield put(setIsLoadingAction(false));
   }
 }
 
@@ -29,19 +32,19 @@ function* fetchProductCategoriesSagaWatcher() {
 }
 
 function* fetchProductCategoriesSaga({ payload = {} }) {
-  const { resolve = Function.prototype, reject = Function.prototype } = payload;
+  try {
+    const { status, statusText, data } = yield call(
+      fetchProductCategoriesApi,
+      payload
+    );
 
-  const { status, statusText, data } = yield call(
-    fetchProductCategoriesApi,
-    payload
-  );
-
-  if (statusText === "OK" || status === 200) {
-    yield resolve(data);
-    yield put(setProductCategoriesAction(data));
-  } else {
+    if (statusText === "OK" || status === 200) {
+      yield put(setProductCategoriesAction(data));
+    } else {
+      yield put(setProductCategoriesAction([]));
+    }
+  } catch (error) {
     yield put(setProductCategoriesAction([]));
-    yield reject(data);
   }
 }
 

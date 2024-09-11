@@ -4,10 +4,15 @@ const rootSelector = (state) => state.products;
 
 export const productsListSelector = createSelector(
   [rootSelector],
-  (state) => state.products || []
+  (state) => state.products
 );
 
 export const productCategoriesSelector = createSelector(
   [rootSelector],
-  (state) => state.categories || []
+  (state) => state.categories
+);
+
+export const isLoadingSelector = createSelector(
+  [rootSelector],
+  (state) => state.isLoading
 );

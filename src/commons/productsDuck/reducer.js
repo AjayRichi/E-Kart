@@ -3,6 +3,7 @@ import { ACTIONS } from "./actions";
 const initialState = {
   products: [],
   categories: [],
+  isLoading: false,
 };
 
 const productsReducer = (state = initialState, action) => {
@@ -16,6 +17,11 @@ const productsReducer = (state = initialState, action) => {
       return {
         ...state,
         categories: action.payload,
+      };
+    case ACTIONS.SET_LOADING:
+      return {
+        ...state,
+        isLoading: action.payload,
       };
     default:
       return state;

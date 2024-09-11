@@ -3,6 +3,7 @@ import { Products } from "./modules/Products";
 import "./styles.css";
 import { BiCube } from "react-icons/bi";
 
+/** STYLED COMPONENTS - START **/
 const StyledLayout = styled.div`
   display: flex;
   flex-direction: column;
@@ -59,6 +60,7 @@ const StyledContent = styled.div`
   padding: 24px;
   overflow: scroll;
 `;
+/** STYLED COMPONENTS - END **/
 
 export default function App() {
   return (
