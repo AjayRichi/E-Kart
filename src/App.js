@@ -18,10 +18,12 @@ const StyledHeader = styled.div`
   height: 82px;
   display: flex;
   align-items: center;
+  column-gap: 50px;
   position: sticky;
   top: 0;
   z-index: 99;
   padding-left: 40px;
+  font-size: 18px;
 `;
 
 const StyledSider = styled.div`
@@ -60,6 +62,7 @@ export default function App() {
       <StyledLayout>
         <StyledHeader>
           <FaUserCircle size={30} />
+          SearchSpring
         </StyledHeader>
         <StyledSider>
           <Tab>

@@ -9,7 +9,7 @@ import {
   getProductCategoriesAction,
   getProductsAction,
 } from "../../commons/productsDuck/actions";
-import { ProductCard } from "../../components";
+import { ProductCard, useDebounce } from "../../components";
 import styled from "styled-components";
 import { Filters } from "./Filters";
 import { formatterText } from "../../commons/utils/currenyFormatter";
@@ -21,7 +21,6 @@ import {
 } from "react-icons/fa";
 import { Sort } from "./Sort";
 import { Search } from "./Search";
-import { useDebounce } from "../../components/Hooks/useDebounce";
 
 /** STYLED COMPONENTS - START **/
 const FixedHeader = styled.header`
@@ -34,7 +33,8 @@ const FilterWrapper = styled.header`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 20px;
+  column-gap: 20px;
+  row-gap: 10px;
   padding: 24px;
   background-color: #ffffff;
 `;
@@ -43,6 +43,7 @@ const ProductsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 20px;
   padding: 0px 24px 50px;
 `;
@@ -62,11 +63,15 @@ const SubHeaderText = styled.div`
   font-size: 14px;
   font-weight: 400;
 `;
-const StyledButton = styled.div`
+
+const StyledButton = styled.button`
   position: absolute;
-  top: 24px;
+  top: 20px;
   right: 24px;
   cursor: pointer;
+  padding: 5px;
+  background-color: #ffffff;
+  border-radius: 10px;
 `;
 /** STYLED COMPONENTS - END **/
 
@@ -161,11 +166,12 @@ const Products = () => {
       <ProductsWrapper>
         {isLoading ? (
           <FaSpinner size={100} />
-        ) : (
-          products.length > 0 &&
+        ) : products.length > 0 ? (
           products.map((product) => (
             <ProductCard key={product.id} details={product} />
           ))
+        ) : (
+          <div>No Products found</div>
         )}
       </ProductsWrapper>
     </React.Fragment>
