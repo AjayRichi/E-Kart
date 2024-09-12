@@ -1,5 +1,5 @@
 
-# SearchSpring-Products
+# E-Kart
 
 ## Project Structure
 
