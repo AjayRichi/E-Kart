@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa";
+import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { formatterText } from "../../commons/utils/currenyFormatter";
 
 const StyledCard = styled.div`
@@ -56,8 +56,10 @@ const StyledPriceWrapper = styled.div`
 const RenderRating = ({ rate = 0, count = 0 }) => {
   const stars = Math.trunc(rate);
   const halfStar = rate - stars;
+  const noStars = 5 - rate;
 
   const starArray = Array.from({ length: rate }, (_, index) => index);
+  const noStarArray = Array.from({ length: noStars }, (_, index) => index);
 
   return (
     <StyledText>
@@ -65,6 +67,9 @@ const RenderRating = ({ rate = 0, count = 0 }) => {
         <FaStar key={index} size={16} />
       ))}
       {halfStar > 0 && <FaStarHalfAlt size={16} />}
+      {noStarArray.map((_, index) => (
+        <FaRegStar key={index} size={16} />
+      ))}
       <span>{`(${count})`}</span>
     </StyledText>
   );
@@ -101,7 +106,7 @@ const RenderPrice = ({ price = 0, discounted_price = 0, currency = "USD" }) => {
 };
 
 const ProductCard = ({ details }) => {
-  const { title, image, rating, price, discounted_price } = details;
+  const { title, image, rating = {}, price, discounted_price } = details;
   const { rate, count } = rating;
 
   return (

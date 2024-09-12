@@ -87,6 +87,7 @@ const Products = () => {
   const productCategories = useSelector(productCategoriesSelector);
   const isLoading = useSelector(isLoadingSelector);
 
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSort, setSelectedSort] = useState("");
   const [searchValue, setSearchValue] = useState("");
@@ -96,6 +97,19 @@ const Products = () => {
   useEffect(() => {
     dispatch(getProductCategoriesAction());
   }, []);
+
+  useEffect(() => {
+    if (debouncedValue) {
+      const results = products.filter((product) => {
+        const title = product.title ? product.title.toLowerCase() : "";
+        const value = debouncedValue.toLowerCase();
+        return title.includes(value);
+      });
+      setFilteredProducts(results);
+    } else {
+      setFilteredProducts(products);
+    }
+  }, [products, debouncedValue]);
 
   useEffect(() => {
     dispatch(
@@ -109,7 +123,7 @@ const Products = () => {
         },
       })
     );
-  }, [selectedCategory, selectedSort, debouncedValue]);
+  }, [selectedCategory, selectedSort]);
 
   const handleFilter = (e) => {
     const value = e.target.value;
@@ -166,8 +180,8 @@ const Products = () => {
       <ProductsWrapper>
         {isLoading ? (
           <FaSpinner size={100} />
-        ) : products.length > 0 ? (
-          products.map((product) => (
+        ) : filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
             <ProductCard key={product.id} details={product} />
           ))
         ) : (

@@ -62,7 +62,7 @@ export default function App() {
       <StyledLayout>
         <StyledHeader>
           <FaUserCircle size={30} />
-          SearchSpring
+          E-Kart
         </StyledHeader>
         <StyledSider>
           <Tab>
