@@ -13,50 +13,60 @@ import { ProductCard } from "../../components";
 import styled from "styled-components";
 import { Filters } from "./Filters";
 import { formatterText } from "../../commons/utils/currenyFormatter";
-import { FaSpinner } from "react-icons/fa";
+import {
+  FaBars,
+  FaChevronDown,
+  FaChevronRight,
+  FaSpinner,
+} from "react-icons/fa";
 import { Sort } from "./Sort";
 import { Search } from "./Search";
-import { useDebounce } from "../../commons/utils/useDebounce";
+import { useDebounce } from "../../components/Hooks/useDebounce";
 
 /** STYLED COMPONENTS - START **/
 const FixedHeader = styled.header`
-  position: fixed;
-  width: 100%;
+  position: sticky;
   top: 82px;
-  left: 115px;
   z-index: 99;
-  // height: 70px;
-  background-color: #f8f7fc;
 `;
 
 const FilterWrapper = styled.header`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 50px;
+  gap: 20px;
+  padding: 24px;
+  background-color: #ffffff;
 `;
 
 const ProductsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
   gap: 20px;
-  padding: 0px;
-  margin-top: 100px;
+  padding: 0px 24px 50px;
+`;
+
+const Title = styled.div`
+  background-color: #f8f7fc;
+  padding: 24px;
 `;
 
 const HeaderText = styled.div`
-  font-family: Proxima Nova;
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 8px;
 `;
 
 const SubHeaderText = styled.div`
-  font-family: Proxima Nova;
   font-size: 14px;
   font-weight: 400;
+`;
+const StyledButton = styled.div`
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  cursor: pointer;
 `;
 /** STYLED COMPONENTS - END **/
 
@@ -75,6 +85,7 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSort, setSelectedSort] = useState("");
   const [searchValue, setSearchValue] = useState("");
+  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
   const debouncedValue = useDebounce(searchValue, 500);
 
   useEffect(() => {
@@ -116,19 +127,28 @@ const Products = () => {
   return (
     <React.Fragment>
       <FixedHeader>
-        <FilterWrapper>
-          <Filters
-            productCategories={productCategories}
-            handleSelect={handleFilter}
-          />
-          <Sort
-            selectedSort={selectedSort}
-            sortOptions={sortOptions}
-            handleSelect={handleSort}
-          />
-          <Search searchValue={searchValue} handleSearch={handleSearch} />
-        </FilterWrapper>
-        <div>
+        <StyledButton onClick={() => setIsFiltersOpen(!isFiltersOpen)}>
+          {isFiltersOpen ? (
+            <FaChevronDown size={24} />
+          ) : (
+            <FaChevronRight size={24} />
+          )}
+        </StyledButton>
+        {isFiltersOpen && (
+          <FilterWrapper>
+            <Filters
+              productCategories={productCategories}
+              handleSelect={handleFilter}
+            />
+            <Sort
+              selectedSort={selectedSort}
+              sortOptions={sortOptions}
+              handleSelect={handleSort}
+            />
+            <Search searchValue={searchValue} handleSearch={handleSearch} />
+          </FilterWrapper>
+        )}
+        <Title>
           <HeaderText>Products</HeaderText>
           <SubHeaderText>
             {formatterText({
@@ -136,7 +156,7 @@ const Products = () => {
               text: selectedCategory,
             })}
           </SubHeaderText>
-        </div>
+        </Title>
       </FixedHeader>
       <ProductsWrapper>
         {isLoading ? (

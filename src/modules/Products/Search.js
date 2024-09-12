@@ -17,7 +17,6 @@ const StyledInput = styled.input`
   border-radius: 100px;
   font-size: 14px;
   font-weight: 400;
-  background-image: url("searchicon.png");
 `;
 const Icon = styled(FaSearch)`
   position: absolute;

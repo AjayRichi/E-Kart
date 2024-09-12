@@ -6,7 +6,7 @@ import { formatterText } from "../../commons/utils/currenyFormatter";
 const StyledCard = styled.div`
   font-family: Avenir Next;
   height: 432px;
-  width: 296px;
+  width: 280px;
   padding: 8px;
   background-color: #ffffff;
   display: flex;
