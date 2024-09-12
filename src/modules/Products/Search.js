@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
 import { StyledFilterHeader } from "./Filters";
 import { FaSearch } from "react-icons/fa";

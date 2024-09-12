@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const useDebounce = (value, delay = 1000) => {
   const [debounce, setDebounce] = useState(value);

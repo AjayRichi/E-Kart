@@ -13,12 +13,7 @@ import { ProductCard, useDebounce } from "../../components";
 import styled from "styled-components";
 import { Filters } from "./Filters";
 import { formatterText } from "../../commons/utils/currenyFormatter";
-import {
-  FaBars,
-  FaChevronDown,
-  FaChevronRight,
-  FaSpinner,
-} from "react-icons/fa";
+import { FaChevronDown, FaChevronRight, FaSpinner } from "react-icons/fa";
 import { Sort } from "./Sort";
 import { Search } from "./Search";
 

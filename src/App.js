@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import { Products } from "./modules/Products";
 import "./styles.css";
